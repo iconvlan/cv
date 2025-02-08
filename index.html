@@ -38,7 +38,7 @@
             justify-content: center;
         }
 
-        .house {
+        .house, .object {
             position: absolute;
             width: 12vw;
             max-width: 150px;
@@ -48,12 +48,26 @@
         
         #character {
             position: absolute;
-            width: 5vw;
-            max-width: 50px;
+            width: 200vw;
+            max-width: 700px;
             height: auto;
             transition: left 1s linear, top 1s linear;
         }
-        
+
+        .npc {
+            position: absolute;
+            width: 200vw; /* Atur ukuran NPC */
+            max-width: 500px;
+            height: auto;
+            animation: moveNPC 4s infinite alternate ease-in-out;
+            cursor: pointer;
+        }
+
+        @keyframes moveNPC {
+            0% { left: 60%; }
+            100% { left: 80%; }
+        }
+
         .popup {
             display: none;
             position: fixed;
@@ -87,6 +101,12 @@
         <img class="house" src="Assets/house3.png" style="left: 29%; top: 40%;" onclick="goToHouse(3)">
         <img class="house" src="Assets/house4.png" style="left: 69%; top: 60%;" onclick="goToHouse(4)">
         <img class="house" src="Assets/house5.png" style="left: 19%; top: 60%;" onclick="goToHouse(5)">
+        
+        <img class="object" src="Assets/tree.png" style="left: 35%; top: 50%;">
+        <img class="object" src="Assets/rock.png" style="left: 65%; top: 55%;">
+        <img class="object" src="Assets/fountain.png" style="left: 50%; top: 70%; transform: translateX(-50%);">
+        
+        <img class="npc" id="npc" src="Assets/character.png" style="top: 50%;" onclick="talkToNPC()">
     </div>
     
     <div id="popup" class="popup">
@@ -133,6 +153,11 @@
 
         function closePopup() {
             popup.style.display = 'none';
+        }
+
+        function talkToNPC() {
+            popupContent.innerText = "Apakah kamu sedang mencari pekerjaan?";
+            popup.style.display = 'block';
         }
     </script>
 </body>
