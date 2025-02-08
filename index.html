@@ -24,7 +24,8 @@
         }
         
         #title img {
-            width: 300px; /* Sesuaikan ukuran gif */
+            width: 20vw;
+            max-width: 300px;
             height: auto;
         }
         
@@ -39,15 +40,17 @@
 
         .house {
             position: absolute;
-            width: 200px;
-            height: 200px;
+            width: 12vw;
+            max-width: 150px;
+            height: auto;
             cursor: pointer;
         }
         
         #character {
             position: absolute;
-            width: 500px;
-            height: 500px;
+            width: 5vw;
+            max-width: 50px;
+            height: auto;
             transition: left 1s linear, top 1s linear;
         }
         
@@ -62,6 +65,7 @@
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
             z-index: 1000;
+            max-width: 80vw;
         }
 
         .popup button {
