@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CV Landing Page</title>
     <style>
-        /* Styling untuk latar belakang dan elemen game */
         body {
             margin: 0;
             overflow: hidden;
@@ -14,6 +13,7 @@
             text-align: center;
             width: 100vw;
             height: 100vh;
+            position: relative;
         }
         
         #title {
@@ -30,7 +30,7 @@
         }
         
         #game-container {
-            position: relative;
+            position: absolute;
             width: 100vw;
             height: 100vh;
             display: flex;
@@ -38,33 +38,33 @@
             justify-content: center;
         }
 
-        .house, .object {
+        .house, .npc {
             position: absolute;
-            width: 12vw;
-            max-width: 150px;
+            width: 10vw;
+            max-width: 120px;
             height: auto;
             cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .house:hover, .npc:hover {
+            transform: scale(1.1);
         }
         
         #character {
             position: absolute;
-            width: 12vw;
-            max-width: 150px;
+            width: 10vw;
+            max-width: 120px;
             height: auto;
-            transition: left 1s linear, top 1s linear;
+            transition: left 2s linear, top 2s linear;
         }
 
         .npc {
-            position: absolute;
-            width: 12vw; /* Atur ukuran NPC */
-            max-width: 150px;
-            height: auto;
             animation: moveNPC 4s infinite alternate ease-in-out;
-            cursor: pointer;
         }
 
         @keyframes moveNPC {
-            0% { left: 60%; }
+            0% { left: 70%; }
             100% { left: 80%; }
         }
 
@@ -86,6 +86,17 @@
             display: block;
             margin: 10px auto 0;
         }
+        
+        #music-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.7);
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
@@ -93,20 +104,18 @@
         <img src="Assets/welcome.gif" alt="Welcome to My Page">
     </div>
     
-    <div id="game-container">
-        <img id="character" src="Assets/character.png" style="left: 50%; top: 50%; transform: translate(-50%, -50%);">
+    <button id="music-btn">🔊 Play</button>
+    
+    <div id="game-container" onclick="moveCharacter(event)">
+        <img id="character" src="Assets/karaktergif.gif" style="left: 50%; top: 70%; transform: translate(-50%, -50%);">
         
-        <img class="house" src="Assets/house1.png" style="left: 49%; top: 20%; transform: translateX(-50%);" onclick="goToHouse(1)">
-        <img class="house" src="Assets/house2.png" style="left: 59%; top: 40%;" onclick="goToHouse(2)">
-        <img class="house" src="Assets/house3.png" style="left: 29%; top: 40%;" onclick="goToHouse(3)">
-        <img class="house" src="Assets/house4.png" style="left: 69%; top: 60%;" onclick="goToHouse(4)">
-        <img class="house" src="Assets/house5.png" style="left: 19%; top: 60%;" onclick="goToHouse(5)">
+        <img class="house" src="Assets/house1.png" style="left: 45%; top: 30%;" onclick="goToHouse(1)">
+        <img class="house" src="Assets/house2.png" style="left: 55%; top: 30%;" onclick="goToHouse(2)">
+        <img class="house" src="Assets/house3.png" style="left: 35%; top: 50%;" onclick="goToHouse(3)">
+        <img class="house" src="Assets/house4.png" style="left: 65%; top: 50%;" onclick="goToHouse(4)">
+        <img class="house" src="Assets/house5.png" style="left: 50%; top: 60%;" onclick="goToHouse(5)">
         
-        <img class="object" src="Assets/tree.png" style="left: 35%; top: 50%;">
-        <img class="object" src="Assets/rock.png" style="left: 65%; top: 55%;">
-        <img class="object" src="Assets/fountain.png" style="left: 50%; top: 70%; transform: translateX(-50%);">
-        
-        <img class="npc" id="npc" src="Assets/character.png" style="top: 50%;" onclick="talkToNPC()">
+        <img class="npc" id="npc" src="Assets/character.png" style="left: 75%; top: 50%;" onclick="talkToNPC()">
     </div>
     
     <div id="popup" class="popup">
@@ -118,36 +127,42 @@
         let character = document.getElementById('character');
         let popup = document.getElementById('popup');
         let popupContent = document.getElementById('popup-content');
-        let walkingSound = new Audio('walk.mp3');
+        let walkingSound = new Audio('Assets/walk.mp3');
+        let backgroundMusic = new Audio('Assets/lagu.mp3');
+        backgroundMusic.loop = true;
+        backgroundMusic.volume = 0.5;
         
-        document.getElementById('game-container').addEventListener('click', function(event) {
+        document.getElementById('music-btn').addEventListener('click', function(event) {
+            event.stopPropagation();
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().then(() => {
+                    this.innerText = "🔇 Pause";
+                }).catch(error => {
+                    console.log("Autoplay diblokir oleh browser, klik lagi untuk mulai.", error);
+                });
+            } else {
+                backgroundMusic.pause();
+                this.innerText = "🔊 Play";
+            }
+        });
+
+        function moveCharacter(event) {
             let x = event.clientX;
             let y = event.clientY;
             character.style.left = `${x}px`;
             character.style.top = `${y}px`;
             walkingSound.play();
-        });
-
-        function goToHouse(houseNumber) {
-            let house = document.querySelector(`.house:nth-child(${houseNumber + 1})`);
-            let rect = house.getBoundingClientRect();
-            character.style.left = `${rect.left + rect.width / 2}px`;
-            character.style.top = `${rect.top + rect.height / 2}px`;
-            walkingSound.play();
-            setTimeout(() => {
-                showPopup(houseNumber);
-            }, 1000);
         }
 
-        function showPopup(houseNumber) {
+        function goToHouse(houseNumber) {
             let content = {
-                1: 'Personal Data: Isi dengan informasi pribadi Anda.',
-                2: 'Job Experience: Isi dengan pengalaman kerja Anda.',
-                3: 'Education: Isi dengan riwayat pendidikan Anda.',
-                4: 'Certificates, Training & Projects: Isi dengan sertifikat dan proyek Anda.',
-                5: 'Contact Me: Isi dengan informasi kontak Anda.'
+                1: '<b>Personal Data</b><br>Nama: Bagus Isnu Wardhana<br>Umur: 30 tahun',
+                2: '<b>Job Experience</b><br>Team Leader di NOC PT. ICON Plus',
+                3: '<b>Education</b><br>Sarjana Teknik Informatika - Universitas XYZ',
+                4: '<b>Certificates, Training & Projects</b><br>- CCNA Certified<br>- Network Automation Project',
+                5: '<b>Contact Me</b><br>Email: bagus@example.com<br>LinkedIn: linkedin.com/in/bagus'
             };
-            popupContent.innerText = content[houseNumber];
+            popupContent.innerHTML = content[houseNumber];
             popup.style.display = 'block';
         }
 
@@ -156,7 +171,7 @@
         }
 
         function talkToNPC() {
-            popupContent.innerText = "Apakah kamu sedang mencari pekerjaan?";
+            popupContent.innerHTML = "Apakah kamu sedang mencari pekerjaan?";
             popup.style.display = 'block';
         }
     </script>
