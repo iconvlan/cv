@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1">
     <title>CV Landing Page</title>
     <style>
         body {
             margin: 0;
             overflow: hidden;
-            background: url('Assets/pulau.gif') no-repeat center center;
+            background: url('Assets/pulau.gif') no-repeat center center fixed;
             background-size: cover;
             text-align: center;
             width: 100vw;
@@ -18,14 +18,14 @@
         
         #title {
             position: absolute;
-            top: 20px;
+            top: 5vh;
             left: 50%;
             transform: translateX(-50%);
         }
         
         #title img {
-            width: 20vw;
-            max-width: 300px;
+            width: 25vw;
+            max-width: 280px;
             height: auto;
         }
         
@@ -40,8 +40,8 @@
 
         .house, .npc {
             position: absolute;
-            width: 10vw;
-            max-width: 120px;
+            width: 8vw;
+            max-width: 100px;
             height: auto;
             cursor: pointer;
             transition: transform 0.3s;
@@ -53,8 +53,8 @@
         
         #character {
             position: absolute;
-            width: 10vw;
-            max-width: 120px;
+            width: 8vw;
+            max-width: 100px;
             height: auto;
             transition: left 1s linear, top 1s linear;
         }
@@ -75,11 +75,12 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
             z-index: 1000;
-            max-width: 80vw;
+            width: 80vw;
+            max-width: 400px;
         }
 
         .popup button {
@@ -107,12 +108,12 @@
     <button id="music-btn">🔊 Play</button>
     
     <div id="game-container" onclick="moveCharacter(event)">
-        <img id="character" src="Assets/botak1fix.gif" style="left: 50%; top: 70%; transform: translate(-50%, -50%);">
+        <img id="character" src="Assets/karakter_idle.gif" style="left: 50%; top: 75%; transform: translate(-50%, -50%);">
         
-        <img class="house" src="Assets/house1.png" style="left: 45%; top: 30%;" onclick="goToHouse(1)">
-        <img class="house" src="Assets/house2.png" style="left: 55%; top: 30%;" onclick="goToHouse(2)">
-        <img class="house" src="Assets/house3.png" style="left: 35%; top: 50%;" onclick="goToHouse(3)">
-        <img class="house" src="Assets/house4.png" style="left: 65%; top: 50%;" onclick="goToHouse(4)">
+        <img class="house" src="Assets/house1.png" style="left: 40%; top: 25%;" onclick="goToHouse(1)">
+        <img class="house" src="Assets/house2.png" style="left: 60%; top: 25%;" onclick="goToHouse(2)">
+        <img class="house" src="Assets/house3.png" style="left: 30%; top: 45%;" onclick="goToHouse(3)">
+        <img class="house" src="Assets/house4.png" style="left: 70%; top: 45%;" onclick="goToHouse(4)">
         <img class="house" src="Assets/house5.png" style="left: 50%; top: 60%;" onclick="goToHouse(5)">
         
         <img class="npc" id="npc" src="Assets/character.png" style="left: 75%; top: 50%;" onclick="talkToNPC()">
@@ -128,7 +129,7 @@
         let popup = document.getElementById('popup');
         let popupContent = document.getElementById('popup-content');
         let walkingSound = new Audio('Assets/run.mp3');
-        let backgroundMusic = new Audio('Assets/lagu.mp3');
+        let backgroundMusic = new Audio('Assets/wanpis.mp3');
         backgroundMusic.loop = true;
         backgroundMusic.volume = 0.5;
         
@@ -150,13 +151,13 @@
             let x = event.clientX;
             let y = event.clientY;
             
-            character.src = 'Assets/botak2fix.gif';
+            character.src = 'Assets/karakter_walk.gif';
             character.style.left = `${x}px`;
             character.style.top = `${y}px`;
             walkingSound.play();
             
             setTimeout(() => {
-                character.src = 'Assets/botak1fix.gif';
+                character.src = 'Assets/karakter_idle.gif';
             }, 1000);
         }
 
@@ -174,11 +175,6 @@
 
         function closePopup() {
             popup.style.display = 'none';
-        }
-
-        function talkToNPC() {
-            popupContent.innerHTML = "Apakah kamu sedang mencari pekerjaan?";
-            popup.style.display = 'block';
         }
     </script>
 </body>
