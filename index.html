@@ -145,6 +145,17 @@
             padding: 2px 6px; /* Perkecil padding tombol */
         }
 
+        #landscape-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.7);
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
     </style>
 </head>
 <body>
@@ -173,6 +184,8 @@
     
     <div id="npc-dialog" class="npc-dialog">Halo! Ada yang bisa saya bantu?</div>
 
+    <button id="landscape-btn">🔄 Switch to Landscape</button>
+    
     <script>
         let character = document.getElementById('character');
         let popup = document.getElementById('popup');
@@ -291,6 +304,19 @@
         // Jalankan pengecekan proximity dan update posisi NPC setiap 500ms
         setInterval(checkProximity, 500);
 
+        document.getElementById('landscape-btn').addEventListener('click', async function () {
+            if (screen.orientation) {
+                try {
+                    await screen.orientation.lock("landscape");
+                    alert("Switched to Landscape Mode!");
+                } catch (error) {
+                    console.log("Gagal mengubah orientasi:", error);
+                    alert("Browser tidak mendukung mode landscape otomatis.");
+                }
+            } else {
+                alert("Fitur tidak didukung di perangkat ini.");
+            }
+        });
 
     </script>
 </body>
