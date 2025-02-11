@@ -10,7 +10,7 @@
             overflow: hidden;
             background: url('Assets/pulau.gif') no-repeat center center fixed;
             background-size: cover;
-            text-align: center;
+            background-position: center;
             width: 100vw;
             height: 100vh;
             position: relative;
@@ -64,9 +64,11 @@
         }
 
         @keyframes moveNPC {
-            0% { left: 70%; }
-            100% { left: 80%; }
+            0% { left: 65%; top: 50%; }
+            50% { left: 80%; top: 55%; }
+            100% { left: 70%; top: 50%; }
         }
+
 
         .popup {
             display: none;
@@ -127,6 +129,28 @@
     <script>
         let character = document.getElementById('character');
         let popup = document.getElementById('popup');
+
+        document.addEventListener('click', function(event) {
+            let isClickInsidePopup = popup.contains(event.target);
+            let isClickOnTrigger = event.target.classList.contains('house') || event.target.id === 'npc';
+
+            if (!isClickInsidePopup && !isClickOnTrigger && popup.style.display === 'block') {
+                closePopup();
+            }
+        });
+
+        function checkOrientation() {
+            if (window.innerHeight > window.innerWidth) {
+                alert("Silakan gunakan mode landscape untuk pengalaman terbaik!");
+            }
+        }
+
+        // Cek saat pertama kali halaman dimuat
+        checkOrientation();
+
+        // Cek saat pengguna memutar layar
+        window.addEventListener("resize", checkOrientation);
+
         let popupContent = document.getElementById('popup-content');
         let walkingSound = new Audio('Assets/run.mp3');
         let backgroundMusic = new Audio('Assets/wanpis.mp3');
@@ -146,6 +170,7 @@
                 this.innerText = "🔊 Play";
             }
         });
+
 
         function moveCharacter(event) {
             let x = event.clientX;
@@ -172,7 +197,7 @@
             popupContent.innerHTML = content[houseNumber];
             popup.style.display = 'block';
         }
-
+        
         function closePopup() {
             popup.style.display = 'none';
         }
