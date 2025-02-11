@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Landing Page</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: url('Assets/background.png') no-repeat center center;
+            background-size: cover;
+            text-align: center;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        #title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        #title img {
+            width: 20vw;
+            max-width: 300px;
+            height: auto;
+        }
+        
+        #game-container {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .house, .npc {
+            position: absolute;
+            width: 10vw;
+            max-width: 120px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .house:hover, .npc:hover {
+            transform: scale(1.1);
+        }
+        
+        #character {
+            position: absolute;
+            width: 10vw;
+            max-width: 120px;
+            height: auto;
+            transition: left 2s linear, top 2s linear;
+        }
+
+        .npc {
+            animation: moveNPC 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes moveNPC {
+            0% { left: 70%; }
+            100% { left: 80%; }
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            max-width: 80vw;
+        }
+
+        .popup button {
+            display: block;
+            margin: 10px auto 0;
+        }
+        
+        #music-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.7);
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="title">
+        <img src="Assets/welcome.gif" alt="Welcome to My Page">
+    </div>
+    
+    <button id="music-btn">🔊 Play</button>
+    
+    <div id="game-container" onclick="moveCharacter(event)">
+        <img id="character" src="Assets/karaktergif.gif" style="left: 50%; top: 70%; transform: translate(-50%, -50%);">
+        
+        <img class="house" src="Assets/house1.png" style="left: 45%; top: 30%;" onclick="goToHouse(1)">
+        <img class="house" src="Assets/house2.png" style="left: 55%; top: 30%;" onclick="goToHouse(2)">
+        <img class="house" src="Assets/house3.png" style="left: 35%; top: 50%;" onclick="goToHouse(3)">
+        <img class="house" src="Assets/house4.png" style="left: 65%; top: 50%;" onclick="goToHouse(4)">
+        <img class="house" src="Assets/house5.png" style="left: 50%; top: 60%;" onclick="goToHouse(5)">
+        
+        <img class="npc" id="npc" src="Assets/character.png" style="left: 75%; top: 50%;" onclick="talkToNPC()">
+    </div>
+    
+    <div id="popup" class="popup">
+        <p id="popup-content">Isi pop-up di sini</p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+    
+    <script>
+        let character = document.getElementById('character');
+        let popup = document.getElementById('popup');
+        let popupContent = document.getElementById('popup-content');
+        let walkingSound = new Audio('Assets/walk.mp3');
+        let backgroundMusic = new Audio('Assets/lagu.mp3');
+        backgroundMusic.loop = true;
+        backgroundMusic.volume = 0.5;
+        
+        document.getElementById('music-btn').addEventListener('click', function(event) {
+            event.stopPropagation();
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().then(() => {
+                    this.innerText = "🔇 Pause";
+                }).catch(error => {
+                    console.log("Autoplay diblokir oleh browser, klik lagi untuk mulai.", error);
+                });
+            } else {
+                backgroundMusic.pause();
+                this.innerText = "🔊 Play";
+            }
+        });
+
+        function moveCharacter(event) {
+            let x = event.clientX;
+            let y = event.clientY;
+            character.style.left = `${x}px`;
+            character.style.top = `${y}px`;
+            walkingSound.play();
+        }
+
+        function goToHouse(houseNumber) {
+            let content = {
+                1: '<b>Personal Data</b><br>Nama: Bagus Isnu Wardhana<br>Umur: 30 tahun',
+                2: '<b>Job Experience</b><br>Team Leader di NOC PT. ICON Plus',
+                3: '<b>Education</b><br>Sarjana Teknik Informatika - Universitas XYZ',
+                4: '<b>Certificates, Training & Projects</b><br>- CCNA Certified<br>- Network Automation Project',
+                5: '<b>Contact Me</b><br>Email: bagus@example.com<br>LinkedIn: linkedin.com/in/bagus'
+            };
+            popupContent.innerHTML = content[houseNumber];
+            popup.style.display = 'block';
+        }
+
+        function closePopup() {
+            popup.style.display = 'none';
+        }
+
+        function talkToNPC() {
+            popupContent.innerHTML = "Apakah kamu sedang mencari pekerjaan?";
+            popup.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
