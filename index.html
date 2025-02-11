@@ -139,17 +139,22 @@
             }
         });
 
-        function checkOrientation() {
-            if (window.innerHeight > window.innerWidth) {
-                alert("Silakan gunakan mode landscape untuk pengalaman terbaik!");
+        function forceLandscape() {
+            if (screen.orientation) {
+                screen.orientation.lock("landscape").catch(err => {
+                    console.log("Gagal mengubah ke landscape:", err);
+                });
             }
         }
-
-        // Cek saat pertama kali halaman dimuat
-        checkOrientation();
-
-        // Cek saat pengguna memutar layar
-        window.addEventListener("resize", checkOrientation);
+        
+        // Minta pengguna masuk ke mode fullscreen dan ubah ke landscape
+        document.addEventListener("click", () => {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().then(() => {
+                    forceLandscape();
+                });
+            }
+        });
 
         let popupContent = document.getElementById('popup-content');
         let walkingSound = new Audio('Assets/run.mp3');
