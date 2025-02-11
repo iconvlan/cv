@@ -56,7 +56,7 @@
             width: 10vw;
             max-width: 120px;
             height: auto;
-            transition: left 2s linear, top 2s linear;
+            transition: left 1s linear, top 1s linear;
         }
 
         .npc {
@@ -149,9 +149,15 @@
         function moveCharacter(event) {
             let x = event.clientX;
             let y = event.clientY;
+            
+            character.src = 'Assets/botak2fix.gif';
             character.style.left = `${x}px`;
             character.style.top = `${y}px`;
             walkingSound.play();
+            
+            setTimeout(() => {
+                character.src = 'Assets/botak1fix.gif';
+            }, 1000);
         }
 
         function goToHouse(houseNumber) {
