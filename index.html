@@ -18,14 +18,14 @@
         
         #title {
             position: absolute;
-            top: 5vh;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 10px;
+            left: 10px;
+            transform: none; /* Hilangkan efek pusat */
         }
         
         #title img {
-            width: 25vw;
-            max-width: 280px;
+            width: 15vw;
+            max-width: 200px;
             height: auto;
         }
         
@@ -101,28 +101,30 @@
             display: block;
             margin: 5px auto 0;
         }
-        
-        #music-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255,255,255,0.7);
-            padding: 10px;
-            border-radius: 10px;
+
+        #music-btn, #landscape-btn {
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            z-index: 1000;
+            font-size: 7px;
+            background: white;
+            width: 70px; /* Lebar tombol seragam */
+            text-align: center;
         }
 
         .npc-dialog {
             display: none;
             position: absolute;
             background: white;
-            padding: 10px;
+            padding: 5px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            font-size: 14px;
+            font-size: 10px; /* Ukuran teks lebih besar */
+            text-align: center;
             white-space: nowrap;
-            transition: left 0.1s, top 0.1s;
+            width: auto;
+            max-width: 100px; /* Batasi lebar maksimum */
         }
 
         .npc-dialog {
@@ -145,14 +147,16 @@
             padding: 2px 6px; /* Perkecil padding tombol */
         }
 
-        #landscape-btn {
+        #controls {
             position: absolute;
-            bottom: 10px;
+            top: 10px;
             right: 10px;
-            background: rgba(255,255,255,0.7);
+            background: rgba(255, 255, 255, 0.8);
             padding: 10px;
             border-radius: 10px;
-            cursor: pointer;
+            display: flex;
+            flex-direction: column; /* Menyusun tombol secara vertikal */
+            gap: 10px; /* Tambahkan jarak antar tombol */
             z-index: 1000;
         }
 
@@ -163,8 +167,11 @@
         <img src="Assets/welcome.gif" alt="Welcome to My Page">
     </div>
     
-    <button id="music-btn">🔊 Play</button>
-    
+    <div id="controls">
+        <button id="music-btn">🔊 Play</button>
+        <button id="landscape-btn">🔄 Rotate</button>
+    </div>
+
     <div id="game-container" onclick="moveCharacter(event)">
         <img id="character" src="Assets/karakter_idle.gif" style="left: 50%; top: 75%; transform: translate(-50%, -50%);">
         
@@ -183,8 +190,6 @@
     </div>
     
     <div id="npc-dialog" class="npc-dialog">Halo! Ada yang bisa saya bantu?</div>
-
-    <button id="landscape-btn">🔄 Switch to Landscape</button>
     
     <script>
         let character = document.getElementById('character');
@@ -196,23 +201,6 @@
 
             if (!isClickInsidePopup && !isClickOnTrigger && popup.style.display === 'block') {
                 closePopup();
-            }
-        });
-
-        function forceLandscape() {
-            if (screen.orientation) {
-                screen.orientation.lock("landscape").catch(err => {
-                    console.log("Gagal mengubah ke landscape:", err);
-                });
-            }
-        }
-
-        // Minta pengguna masuk ke mode fullscreen dan ubah ke landscape
-        document.addEventListener("click", () => {
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen().then(() => {
-                    forceLandscape();
-                });
             }
         });
 
@@ -254,10 +242,10 @@
         function goToHouse(houseNumber) {
             let content = {
                 1: '<b>Personal Data</b><br>Nama: Bagus Isnu Wardhana<br>Umur: 17 tahun',
-                2: '<b>Job Experience</b><br>Team Leader di NOC PT. ICON Plus',
-                3: '<b>Education</b><br>Sarjana Teknik Informatika - Universitas XYZ',
+                2: '<b>Job Experience</b><br>PT. ICON Plus - As Team Leader NOC Retail',
+                3: '<b>Education</b><br>D3 Teknik Kompuer - Universitas Telkom',
                 4: '<b>Certificates, Training & Projects</b><br>- CCNA Certified<br>- Network Automation Project',
-                5: '<b>Contact Me</b><br>Email: bagus@example.com<br>LinkedIn: linkedin.com/in/bagus'
+                5: '<b>Contact Me</b><br>Email: smilersmiler251@gmail.com<br>LinkedIn: www.linkedin.com/in/bagus-isnu-673854157'
             };
             popupContent.innerHTML = content[houseNumber];
             popup.style.display = 'block';
@@ -278,8 +266,8 @@
 
             let npcRect = npc.getBoundingClientRect();
 
-            npcDialog.style.left = `${npcRect.left + window.scrollX}px`;
-            npcDialog.style.top = `${npcRect.top + window.scrollY - 40}px`; // 40px di atas NPC
+            npcDialog.style.left = `${npcRect.left + npcRect.width / 2 - npcDialog.offsetWidth / 2}px`;
+            npcDialog.style.top = `${npcRect.top - npcDialog.offsetHeight + window.scrollY - 5}px`; // Lebih dekat ke kepala NPC
         }
 
         function checkProximity() {
