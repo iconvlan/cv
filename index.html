@@ -160,6 +160,24 @@
             z-index: 1000;
         }
 
+        #fish-controls {
+            position: absolute;
+            top: 80px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            z-index: 1000;
+        }
+
+
+
+
+
+
+
+
+
     </style>
 </head>
 <body>
@@ -170,6 +188,10 @@
     <div id="controls">
         <button id="music-btn">🔊 Play</button>
         <button id="landscape-btn">🔄 Rotate</button>
+    </div>
+
+    <div id="fish-controls">
+        <button id="fish-btn">🎣 Mancing</button>
     </div>
 
     <div id="game-container" onclick="moveCharacter(event)">
@@ -183,17 +205,26 @@
         
         <img class="npc" id="npc" src="Assets/npc1.gif" style="left: 10%; top: 60%; width: 30px;" onclick="talkToNPC()">
     </div>
-    
+
     <div id="popup" class="popup">
         <p id="popup-content">Isi pop-up di sini</p>
+        <img id="fish-image" src="" alt="Hasil pancingan" style="width:100%; display: none;">
         <button onclick="closePopup()">Close</button>
     </div>
     
     <div id="npc-dialog" class="npc-dialog">Halo! Ada yang bisa saya bantu?</div>
     
+
+
+
+
+
+
+    
     <script>
         let character = document.getElementById('character');
         let popup = document.getElementById('popup');
+        let fishImage = document.getElementById('fish-image');
 
         document.addEventListener('click', function(event) {
             let isClickInsidePopup = popup.contains(event.target);
@@ -203,6 +234,32 @@
                 closePopup();
             }
         });
+
+        document.getElementById('fish-btn').addEventListener('click', function () {
+            let fishingSpotX = window.innerWidth * 0.1;
+            let fishingSpotY = window.innerHeight * 0.8;
+            
+            character.src = 'Assets/karakter_walk.gif';
+            character.style.left = `${fishingSpotX}px`;
+            character.style.top = `${fishingSpotY}px`;
+            
+            setTimeout(() => {
+                character.src = 'Assets/karakter_fishing.gif';
+                setTimeout(() => {
+                    let catchChance = Math.random();
+                    if (catchChance < 0.5) { 
+                        fishImage.src = 'Assets/ikan1.jpg';
+                        fishImage.style.display = 'block';
+                        popupContent.innerHTML = "Selamat! Kamu mendapatkan ikan!";
+                    } else {
+                        fishImage.style.display = 'none';
+                        popupContent.innerHTML = "Yah! Kamu tidak mendapatkan ikan kali ini.";
+                    }
+                    popup.style.display = 'block';
+                }, 3000);
+            }, 1000);
+        });
+
 
         let popupContent = document.getElementById('popup-content');
         let walkingSound = new Audio('Assets/run.mp3');
@@ -253,6 +310,7 @@
         
         function closePopup() {
             popup.style.display = 'none';
+            fishImage.style.display = 'none';
         }
 
         function talkToNPC() {
@@ -305,7 +363,7 @@
                 alert("Fitur tidak didukung di perangkat ini.");
             }
         });
-        
+
     </script>
 </body>
 </html>
