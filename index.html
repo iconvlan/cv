@@ -350,17 +350,20 @@
         // Jalankan pengecekan proximity dan update posisi NPC setiap 500ms
         setInterval(checkProximity, 500);
 
-        document.getElementById('landscape-btn').addEventListener('click', async function () {
+        function forceLandscape() {
             if (screen.orientation) {
-                try {
-                    await screen.orientation.lock("landscape");
-                    alert("Switched to Landscape Mode!");
-                } catch (error) {
-                    console.log("Gagal mengubah orientasi:", error);
-                    alert("Browser tidak mendukung mode landscape otomatis.");
-                }
-            } else {
-                alert("Fitur tidak didukung di perangkat ini.");
+                screen.orientation.lock("landscape").catch(err => {
+                    console.log("Gagal mengubah ke landscape:", err);
+                });
+            }
+        }
+
+        // Minta pengguna masuk ke mode fullscreen dan ubah ke landscape
+        document.addEventListener("click", () => {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().then(() => {
+                    forceLandscape();
+                });
             }
         });
 
